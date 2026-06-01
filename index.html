@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Abertura ao Vivo</title>
+    <title>Monitor de ADRs e Abertura</title>
     <style>
         :root {
-            --bg-color: #0b0e17;
-            --card-bg: #111625;
-            --border-color: #1e2640;
+            --bg-color: #0b0e14;
+            --card-bg: #111622;
+            --border-color: #1a2236;
             --text-color: #ffffff;
-            --text-muted: #6272a4;
-            --neon-blue: #00f0ff;
-            --neon-yellow: #fff500;
-            --neon-pink: #ff5555;
+            --text-muted: #53638c;
+            --neon-green: #00ffaa;
+            --neon-blue: #00e5ff;
+            --neon-pink: #ff4a6b;
+            --neon-yellow: #ffea00;
         }
 
         body {
@@ -32,64 +33,62 @@
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 950px;
         }
 
-        /* Painel Superior */
-        .calc-panel {
+        /* Painel Superior - Lista de Ativos */
+        .main-panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 20px;
         }
 
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .panel-title {
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .btn-action {
-            background: #282a36;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
+        .table-header {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1.5fr;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: 0.2s;
-        }
-
-        .btn-action:hover {
-            background: #44475a;
-        }
-
-        .asset-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: var(--text-muted);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 15px;
         }
 
-        .asset-name {
-            font-weight: bold;
-            font-size: 15px;
-            letter-spacing: 1px;
+        .text-right { text-align: right; }
+
+        .asset-row {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1.5fr;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            transition: background 0.2s;
+        }
+
+        .asset-row:hover {
+            background: rgba(255,255,255,0.01);
+        }
+
+        .asset-ticker {
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .asset-company {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Inputs Estilizados */
+        .input-control {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         .input-group {
@@ -105,9 +104,9 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 18px;
-            width: 35px;
-            height: 35px;
+            font-size: 16px;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -122,13 +121,12 @@
             border: none;
             color: var(--text-color);
             text-align: center;
-            width: 70px;
-            font-size: 16px;
+            width: 60px;
+            font-size: 15px;
             font-weight: bold;
             outline: none;
         }
 
-        /* Esconder as setinhas padrão do input de número */
         .asset-input::-webkit-outer-spin-button,
         .asset-input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -137,81 +135,166 @@
 
         .input-suffix {
             color: var(--text-muted);
-            padding-right: 10px;
-            font-size: 14px;
+            padding-right: 8px;
+            font-size: 12px;
         }
 
-        .formula-preview {
-            text-align: center;
+        /* Linha de Comandos Básicos */
+        .action-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-action {
+            background: #181f33;
+            border: 1px solid var(--border-color);
             color: var(--text-muted);
-            font-size: 13px;
-            margin-top: 25px;
+            padding: 6px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .btn-action:hover {
+            color: var(--text-color);
+            background: #222b47;
+        }
+
+        /* Seção da Fórmula das ADRs (Meio) */
+        .formula-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .formula-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .formula-flex {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .formula-box {
+            background: rgba(7, 9, 14, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-weight: bold;
             font-family: monospace;
         }
 
-        .display-box {
-            background: linear-gradient(135deg, #131929 0%, #07090e 100%);
-            border: 1px solid #222b45;
+        /* Container Inferior LADO A LADO */
+        .unified-dashboard {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin-top: 20px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
-        }
-
-        .display-value {
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--neon-yellow);
-            margin: 0;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 245, 0, 0.3);
-        }
-
-        .display-status {
-            font-size: 13px;
-            letter-spacing: 2px;
-            color: var(--neon-yellow);
-            margin-top: 8px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        /* Painéis Inferiores (Grid) */
-        .bottom-grid {
+            padding: 25px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1.2fr 1.2fr 1.6fr;
+            gap: 30px;
+            align-items: center;
         }
 
-        @media (max-width: 600px) {
-            .bottom-grid {
+        /* Responsividade para Celular (Fica em formato de lista se a tela for pequena) */
+        @media (max-width: 800px) {
+            .unified-dashboard {
                 grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .column-border {
+                border: none !important;
+                padding: 0 !important;
             }
         }
 
-        .info-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+        .column-border {
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            padding-right: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .card-title {
+        /* Coluna 1: Soma e Display */
+        .display-title {
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
+        .display-value {
+            font-size: 46px;
+            font-weight: 900;
+            color: var(--neon-green);
+            margin: 0;
+            line-height: 1;
+            text-shadow: 0 0 15px rgba(0, 255, 170, 0.2);
+        }
+
+        /* Coluna 2: Tabela de Variação */
+        .var-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .var-table th {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            padding-bottom: 8px;
+        }
+
+        .var-row {
+            opacity: 0.3;
+            transition: 0.2s;
+        }
+
+        .var-row.active {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .var-row td {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+
+        /* Coluna 3: Direção e Estratégia */
+        .strat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         .strat-item {
-            margin-bottom: 15px;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.4;
-            opacity: 0.4;
-            transition: 0.3s;
+            opacity: 0.3;
+            transition: 0.2s;
         }
 
         .strat-item.active {
@@ -221,155 +304,193 @@
         .strat-header {
             font-weight: bold;
             margin-bottom: 2px;
-            text-transform: uppercase;
         }
 
-        .strat-blue { color: var(--neon-blue); }
-        .strat-red { color: var(--neon-pink); }
-        .strat-gray { color: #8be9fd; }
-
-        /* Tabela de Variação */
-        .var-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .var-table th {
-            text-align: left;
-            color: var(--text-muted);
-            font-size: 11px;
-            text-transform: uppercase;
-            padding-bottom: 10px;
-        }
-
-        .var-row {
-            opacity: 0.4;
-            transition: 0.3s;
-        }
-
-        .var-row.active {
-            opacity: 1;
-            font-weight: bold;
+        /* Classes de Cores para Dinâmica */
+        .c-green { color: var(--neon-green) !important; }
+        .c-blue { color: var(--neon-blue) !important; }
+        .c-pink { color: var(--neon-pink) !important; }
+        
+        .row-active-style {
             background: rgba(255,255,255,0.02);
         }
 
-        .var-row td {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .text-right { text-align: right; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <div class="calc-panel">
-        <div class="panel-header">
-            <div class="panel-title">📊 Calculadora Ao Vivo</div>
-            <div>
-                <button class="btn-action" onclick="randomizar()">Random</button>
-                <button class="btn-action" onclick="resetar()">Reset</button>
+    <!-- GRADE DE ATIVOS (PAINEL SUPERIOR) -->
+    <div class="main-panel">
+        <div class="table-header">
+            <div>ADR</div>
+            <div>Empresa</div>
+            <div class="text-right">Variação</div>
+        </div>
+
+        <!-- VALE -->
+        <div class="asset-row" id="row-VALE">
+            <div class="asset-ticker c-green">VALE</div>
+            <div class="asset-company">Vale</div>
+            <div class="input-control">
+                <div class="input-group">
+                    <button class="btn-step" onclick="alterar('val-vale', -0.1)">-</button>
+                    <input type="number" id="val-vale" class="asset-input" value="1.1" step="0.1" oninput="calcular()">
+                    <span class="input-suffix">%</span>
+                    <button class="btn-step" onclick="alterar('val-vale', 0.1)">+</button>
+                </div>
             </div>
         </div>
 
-        <div class="asset-row">
-            <div class="asset-name">VIX</div>
-            <div class="input-group">
-                <button class="btn-step" onclick="alterar('vix', -0.1)">-</button>
-                <input type="number" id="vix" class="asset-input" value="0.0" step="0.1" oninput="calcular()">
-                <span class="input-suffix">%</span>
-                <button class="btn-step" onclick="alterar('vix', 0.1)">+</button>
+        <!-- PBR -->
+        <div class="asset-row" id="row-PBR">
+            <div class="asset-ticker c-green">PBR</div>
+            <div class="asset-company">Petrobras</div>
+            <div class="input-control">
+                <div class="input-group">
+                    <button class="btn-step" onclick="alterar('val-pbr', -0.1)">-</button>
+                    <input type="number" id="val-pbr" class="asset-input" value="2.5" step="0.1" oninput="calcular()">
+                    <span class="input-suffix">%</span>
+                    <button class="btn-step" onclick="alterar('val-pbr', 0.1)">+</button>
+                </div>
             </div>
         </div>
 
-        <div class="asset-row">
-            <div class="asset-name">FEF2!</div>
-            <div class="input-group">
-                <button class="btn-step" onclick="alterar('fef2', -0.1)">-</button>
-                <input type="number" id="fef2" class="asset-input" value="0.0" step="0.1" oninput="calcular()">
-                <span class="input-suffix">%</span>
-                <button class="btn-step" onclick="alterar('fef2', 0.1)">+</button>
+        <!-- ITUB -->
+        <div class="asset-row" id="row-ITUB">
+            <div class="asset-ticker c-green">ITUB</div>
+            <div class="asset-company">Itaú Unibanco</div>
+            <div class="input-control">
+                <div class="input-group">
+                    <button class="btn-step" onclick="alterar('val-itub', -0.1)">-</button>
+                    <input type="number" id="val-itub" class="asset-input" value="5.1" step="0.1" oninput="calcular()">
+                    <span class="input-suffix">%</span>
+                    <button class="btn-step" onclick="alterar('val-itub', 0.1)">+</button>
+                </div>
             </div>
         </div>
 
-        <div class="asset-row">
-            <div class="asset-name">CL1!</div>
-            <div class="input-group">
-                <button class="btn-step" onclick="alterar('cl1', -0.1)">-</button>
-                <input type="number" id="cl1" class="asset-input" value="0.0" step="0.1" oninput="calcular()">
-                <span class="input-suffix">%</span>
-                <button class="btn-step" onclick="alterar('cl1', 0.1)">+</button>
+        <!-- BBDC -->
+        <div class="asset-row" id="row-BBDC">
+            <div class="asset-ticker c-green">BBDC</div>
+            <div class="asset-company">Banco Bradesco</div>
+            <div class="input-control">
+                <div class="input-group">
+                    <button class="btn-step" onclick="alterar('val-bbdc', -0.1)">-</button>
+                    <input type="number" id="val-bbdc" class="asset-input" value="-3.0" step="0.1" oninput="calcular()">
+                    <span class="input-suffix">%</span>
+                    <button class="btn-step" onclick="alterar('val-bbdc', 0.1)">+</button>
+                </div>
             </div>
         </div>
 
-        <div class="formula-preview" id="formula-text">
-            (<span style="color: var(--neon-blue);">+0.00%</span>) + <span style="color: var(--neon-blue);">0.00%</span> + <span style="color: var(--neon-blue);">0.00%</span> = <span style="color: var(--neon-yellow);">+0.00%</span>
+        <!-- BBAS -->
+        <div class="asset-row" id="row-BBAS">
+            <div class="asset-ticker c-green">BBAS</div>
+            <div class="asset-company">Banco do Brasil</div>
+            <div class="input-control">
+                <div class="input-group">
+                    <button class="btn-step" onclick="alterar('val-bbas', -0.1)">-</button>
+                    <input type="number" id="val-bbas" class="asset-input" value="8.0" step="0.1" oninput="calcular()">
+                    <span class="input-suffix">%</span>
+                    <button class="btn-step" onclick="alterar('val-bbas', 0.1)">+</button>
+                </div>
+            </div>
         </div>
 
-        <div class="display-box">
-            <h1 class="display-value" id="total-display">+0.00%</h1>
-            <div class="display-status" id="status-display">NEUTRO - AGUARDAR</div>
+        <!-- B3 -->
+        <div class="asset-row" id="row-B3">
+            <div class="asset-ticker c-green">B3SA</div>
+            <div class="asset-company">B3</div>
+            <div class="input-control">
+                <div class="input-group">
+                    <button class="btn-step" onclick="alterar('val-b3', -0.1)">-</button>
+                    <input type="number" id="val-b3" class="asset-input" value="3.4" step="0.1" oninput="calcular()">
+                    <span class="input-suffix">%</span>
+                    <button class="btn-step" onclick="alterar('val-b3', 0.1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button class="btn-action" onclick="randomizar()">🎲 Random</button>
+            <button class="btn-action" onclick="limpar()">Limpar</button>
         </div>
     </div>
 
-    <div class="bottom-grid">
+    <!-- SEÇÃO DA FÓRMULA (MEIO) -->
+    <div class="formula-panel">
+        <div class="formula-title">Fórmula das ADRs</div>
+        <div class="formula-flex" id="formula-container">
+            <!-- Gerado via JavaScript dinamicamente -->
+        </div>
+    </div>
+
+    <!-- RECIPIENTE UNIFICADO LADO A LADO -->
+    <div class="unified-dashboard">
         
-        <div class="info-card">
-            <div class="card-title">DIREÇÃO E ESTRATÉGIA</div>
-            
-            <div class="strat-item" id="strat-pos">
-                <div class="strat-header strat-blue">↑ POSITIVO ➔ ABERTURA COMPRADORA</div>
-                <div style="color: var(--text-muted);">Buscar regiões de suporte abaixo da abertura.</div>
-            </div>
-
-            <div class="strat-item" id="strat-neg">
-                <div class="strat-header strat-red">↓ NEGATIVO ➔ ABERTURA VENDEDORA</div>
-                <div style="color: var(--text-muted);">Buscar regiões de resistência acima da abertura.</div>
-            </div>
-
-            <div class="strat-item active" id="strat-lat">
-                <div class="strat-header strat-gray">↔ LATERAL ➔ EXTREMIDADES</div>
-                <div style="color: var(--text-muted);">Compra no suporte, venda na resistência. Alvos curtos.</div>
-            </div>
+        <!-- Coluna 1: Soma Global -->
+        <div class="column-border">
+            <div class="display-title">Soma das ADRs</div>
+            <h1 class="display-value" id="total-display">+0.0%</h1>
         </div>
 
-        <div class="info-card">
-            <div class="card-title">TAMANHO DA ABERTURA</div>
+        <!-- Coluna 2: Tabela de Filtro de Variação -->
+        <div class="column-border">
             <table class="var-table">
                 <thead>
                     <tr>
-                        <th>VARIAÇÃO</th>
-                        <th class="text-right">ABERTURA</th>
+                        <th>Variação</th>
+                        <th class="text-right">Tamanho</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="var-row active" id="row-lateral">
+                    <tr class="var-row" id="row-lateral">
                         <td>&lt; 1,5%</td>
                         <td class="text-right" style="color: var(--text-muted);">Lateral</td>
                     </tr>
                     <tr class="var-row" id="row-fraca">
                         <td>1,5% - 2,5%</td>
-                        <td class="text-right" style="color: #50fa7b;">Fraca</td>
+                        <td class="text-right c-blue">Fraca</td>
                     </tr>
                     <tr class="var-row" id="row-moderada">
                         <td>2,5% - 4,5%</td>
-                        <td class="text-right" style="color: var(--neon-blue);">Moderada</td>
+                        <td class="text-right c-blue">Moderada</td>
                     </tr>
                     <tr class="var-row" id="row-forte">
                         <td>&gt; 4,5%</td>
-                        <td class="text-right" style="color: #ff79c6;">FORTE</td>
+                        <td class="text-right c-blue" style="font-weight:900;">FORTE</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Coluna 3: Tomada de Decisão -->
+        <div class="strat-box">
+            <div class="strat-item" id="strat-pos">
+                <div class="strat-header c-green">↑ POSITIVO ➔ ABERTURA COMPRADORA</div>
+                <div style="color: var(--text-muted);">Buscar regiões de suporte abaixo da abertura.</div>
+            </div>
+
+            <div class="strat-item" id="strat-neg">
+                <div class="strat-header c-pink">↓ NEGATIVO ➔ ABERTURA VENDEDORA</div>
+                <div style="color: var(--text-muted);">Buscar regiões de resistência acima da abertura.</div>
+            </div>
+
+            <div class="strat-item" id="strat-lat">
+                <div class="strat-header c-blue">↔ LATERAL ➔ EXTREMIDADES</div>
+                <div style="color: var(--text-muted);">Compra no suporte, venda na resistência. Alvos curtos.</div>
+            </div>
         </div>
 
     </div>
 </div>
 
 <script>
+    const listaIds = ['val-vale', 'val-pbr', 'val-itub', 'val-bbdc', 'val-bbas', 'val-b3'];
+    const listaTickers = ['VALE', 'PBR', 'ITUB', 'BBDC', 'BBAS', 'B3SA'];
+
     function alterar(id, valor) {
         let input = document.getElementById(id);
         let atual = parseFloat(input.value) || 0;
@@ -377,84 +498,98 @@
         calcular();
     }
 
-    function resetar() {
-        document.getElementById('vix').value = "0.0";
-        document.getElementById('fef2').value = "0.0";
-        document.getElementById('cl1').value = "0.0";
+    function limpar() {
+        listaIds.forEach(id => document.getElementById(id).value = "0.0");
         calcular();
     }
 
     function randomizar() {
-        // Gera valores aleatórios entre -3% e +3% para testar o painel dinâmico
-        document.getElementById('vix').value = ((Math.random() * 6) - 3).toFixed(1);
-        document.getElementById('fef2').value = ((Math.random() * 6) - 3).toFixed(1);
-        document.getElementById('cl1').value = ((Math.random() * 6) - 3).toFixed(1);
+        listaIds.forEach(id => {
+            document.getElementById(id).value = ((Math.random() * 8) - 4).toFixed(1);
+        });
         calcular();
     }
 
     function calcular() {
-        let vix = parseFloat(document.getElementById('vix').value) || 0;
-        let fef2 = parseFloat(document.getElementById('fef2').value) || 0;
-        let cl1 = parseFloat(document.getElementById('cl1').value) || 0;
+        let soma = 0;
+        let formulaHtml = '';
 
-        let total = vix + fef2 + cl1;
-        let absTotal = Math.abs(total);
+        listaIds.forEach((id, index) => {
+            let valor = parseFloat(document.getElementById(id).value) || 0;
+            soma += valor;
 
-        // Atualiza a linha da fórmula
-        let formatVix = (vix >= 0 ? "+" : "") + vix.toFixed(2) + "%";
-        let formatFef2 = (fef2 >= 0 ? "+" : "") + fef2.toFixed(2) + "%";
-        let formatCl1 = (cl1 >= 0 ? "+" : "") + cl1.toFixed(2) + "%";
-        let formatTotal = (total >= 0 ? "+" : "") + total.toFixed(2) + "%";
+            // Altera a cor da linha individual do ativo para feedback visual rápido
+            let row = document.getElementById('row-' + listaTickers[index].replace('SA',''));
+            let tickerText = row.querySelector('.asset-ticker');
+            
+            if(valor > 0) {
+                tickerText.className = 'asset-ticker c-green';
+                row.style.background = 'rgba(0, 255, 170, 0.01)';
+            } else if(valor < 0) {
+                tickerText.className = 'asset-ticker c-pink';
+                row.style.background = 'rgba(255, 74, 107, 0.01)';
+            } else {
+                tickerText.className = 'asset-ticker c-blue';
+                row.style.background = 'transparent';
+            }
 
-        document.getElementById('formula-text').innerHTML = 
-            `(<span style="color: ${vix >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatVix}</span>) + ` +
-            `<span style="color: ${fef2 >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatFef2}</span> + ` +
-            `<span style="color: ${cl1 >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatCl1}</span> = ` +
-            `<span style="color: var(--neon-yellow);">${formatTotal}</span>`;
+            // Monta os blocos individuais da fórmula estruturada
+            let corBox = valor >= 0 ? 'var(--neon-green)' : 'var(--neon-pink)';
+            let sinalBox = valor >= 0 ? '+' : '';
+            formulaHtml += `<div class="formula-box" style="color: ${corBox}">[${sinalBox}${valor.toFixed(1)}%]</div>`;
+            if(index < listaIds.length - 1) formulaHtml += ' + ';
+        });
 
-        // Display Central
-        document.getElementById('total-display').innerText = formatTotal;
+        // Exibição da soma final na barra da fórmula
+        let sinalSoma = soma >= 0 ? '+' : '';
+        let corSoma = soma >= 0 ? 'var(--neon-green)' : 'var(--neon-pink)';
+        formulaHtml += ` = <span style="color: ${corSoma}; font-weight:900;">${sinalSoma}${soma.toFixed(1)}%</span>`;
+        document.getElementById('formula-container').innerHTML = formulaHtml;
 
-        // Resetar classes ativas das estratégias e linhas
+        // Display de Impacto Centralizado da Esquerda
+        let display = document.getElementById('total-display');
+        display.innerText = `${sinalSoma}${soma.toFixed(1)}%`;
+        display.className = `display-value ${soma >= 0 ? 'c-green' : 'c-pink'}`;
+
+        // Resetar Linhas e Estratégias
+        document.getElementById('row-lateral').classList.remove('active', 'row-active-style');
+        document.getElementById('row-fraca').classList.remove('active', 'row-active-style');
+        document.getElementById('row-moderada').classList.remove('active', 'row-active-style');
+        document.getElementById('row-forte').classList.remove('active', 'row-active-style');
+        
         document.getElementById('strat-pos').classList.remove('active');
         document.getElementById('strat-neg').classList.remove('active');
         document.getElementById('strat-lat').classList.remove('active');
-        
-        document.getElementById('row-lateral').classList.remove('active');
-        document.getElementById('row-fraca').classList.remove('active');
-        document.getElementById('row-moderada').classList.remove('active');
-        document.getElementById('row-forte').classList.remove('active');
 
-        // Lógica de Status e Estratégia
-        let statusText = "NEUTRO - AGUARDAR";
-        
-        if (total > 0) {
+        // Ativação da estratégia direcional
+        if (soma > 0) {
             document.getElementById('strat-pos').classList.add('active');
-            statusText = "SINAL COMPRADOR";
-        } else if (total < 0) {
+        } else if (soma < 0) {
             document.getElementById('strat-neg').classList.add('active');
-            statusText = "SINAL VENDEDOR";
         } else {
             document.getElementById('strat-lat').classList.add('active');
         }
 
-        // Lógica de Tamanho de Abertura (Intensidade)
-        if (absTotal < 1.5) {
-            document.getElementById('row-lateral').classList.add('active');
-            if(total === 0) statusText = "NEUTRO - AGUARDAR";
-        } else if (absTotal <= 2.5) {
-            document.getElementById('row-fraca').classList.add('active');
-            statusText += " - FRACA";
-        } else if (absTotal <= 4.5) {
-            document.getElementById('row-moderada').classList.add('active');
-            statusText += " - MODERADA";
+        // Ativação da faixa de tamanho/intensidade
+        let absSoma = Math.abs(soma);
+        if (absSoma < 1.5) {
+            document.getElementById('row-lateral').classList.add('active', 'row-active-style');
+            if(soma === 0) {
+                document.getElementById('strat-pos').classList.remove('active');
+                document.getElementById('strat-neg').classList.remove('active');
+                document.getElementById('strat-lat').classList.add('active');
+            }
+        } else if (absSoma <= 2.5) {
+            document.getElementById('row-fraca').classList.add('active', 'row-active-style');
+        } else if (absSoma <= 4.5) {
+            document.getElementById('row-moderada').classList.add('active', 'row-active-style');
         } else {
-            document.getElementById('row-forte').classList.add('active');
-            statusText += " - FORTE";
+            document.getElementById('row-forte').classList.add('active', 'row-active-style');
         }
-
-        document.getElementById('status-display').innerText = statusText;
     }
+
+    // Inicializa calculando na primeira carga
+    calcular();
 </script>
 
 </body>
