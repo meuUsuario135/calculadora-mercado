@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pro - Pré-Market Simulator</title>
+    <title>Dashboard Pro - Pré-Market Simulator (Com DXY)</title>
     <style>
         :root {
             --bg-color: #0b0e14;
@@ -35,7 +35,6 @@
             max-width: 1200px;
         }
 
-        /* Título Principal do Dashboard */
         .dash-header {
             text-align: center;
             margin-bottom: 20px;
@@ -54,7 +53,6 @@
             margin-bottom: 20px;
         }
 
-        /* Se a tela for pequena (celular), joga um para baixo do outro */
         @media (max-width: 900px) {
             .top-grid-columns {
                 grid-template-columns: 1fr;
@@ -120,7 +118,7 @@
             font-size: 12px;
         }
 
-        /* Inputs Estilizados */
+        /* Inputs */
         .input-control {
             display: flex;
             align-items: center;
@@ -200,7 +198,7 @@
             background: #222b47;
         }
 
-        /* FÓRMULA RESUMIDA (CENTRAL) */
+        /* FÓRMULA RESUMIDA */
         .formula-panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -368,17 +366,20 @@
     
     <div class="dash-header">💻 Dashboard de Análise Pré-Market</div>
 
+    <!-- PAINÉIS SUPERIORES LADO A LADO -->
     <div class="top-grid-columns">
         
+        <!-- COLUNA ESQUERDA: ATIVOS GLOBAIS (MACRO) -->
         <div class="main-panel">
             <div>
-                <div class="panel-title">🌎 Filtro Macro / Volatilidade</div>
+                <div class="panel-title">🌎 Filtro Macro / Calculadora Ao Vivo</div>
                 <div class="table-header">
                     <div>Ativo</div>
                     <div>Referência</div>
                     <div class="text-right">Variação</div>
                 </div>
 
+                <!-- VIX -->
                 <div class="asset-row" id="row-VIX">
                     <div class="asset-ticker c-blue">VIX</div>
                     <div class="asset-company">Volatilidade</div>
@@ -392,6 +393,7 @@
                     </div>
                 </div>
 
+                <!-- FEF2! -->
                 <div class="asset-row" id="row-FEF">
                     <div class="asset-ticker c-blue">FEF2!</div>
                     <div class="asset-company">Minério de Ferro</div>
@@ -405,6 +407,7 @@
                     </div>
                 </div>
 
+                <!-- CL1! -->
                 <div class="asset-row" id="row-CL1">
                     <div class="asset-ticker c-blue">CL1!</div>
                     <div class="asset-company">Petróleo Bruto</div>
@@ -417,6 +420,20 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- DXY -->
+                <div class="asset-row" id="row-DXY">
+                    <div class="asset-ticker c-blue">DXY</div>
+                    <div class="asset-company">Índice Dólar Global</div>
+                    <div class="input-control">
+                        <div class="input-group">
+                            <button class="btn-step" onclick="alterar('val-dxy', -0.1)">-</button>
+                            <input type="number" id="val-dxy" class="asset-input" value="0.2" step="0.1" oninput="calcularTudo()">
+                            <span class="input-suffix">%</span>
+                            <button class="btn-step" onclick="alterar('val-dxy', 0.1)">+</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="action-bar">
@@ -424,6 +441,7 @@
             </div>
         </div>
 
+        <!-- COLUNA DIREITA: MONITOR DE ADRs (MICRO) -->
         <div class="main-panel">
             <div>
                 <div class="panel-title">🇧🇷 Fluxo Micro (ADRs Brasileiras)</div>
@@ -433,6 +451,7 @@
                     <div class="text-right">Variação</div>
                 </div>
 
+                <!-- VALE -->
                 <div class="asset-row" id="row-VALE">
                     <div class="asset-ticker c-blue">VALE</div>
                     <div class="asset-company">Vale SA</div>
@@ -446,6 +465,7 @@
                     </div>
                 </div>
 
+                <!-- PBR -->
                 <div class="asset-row" id="row-PBR">
                     <div class="asset-ticker c-blue">PBR</div>
                     <div class="asset-company">Petrobras</div>
@@ -459,6 +479,7 @@
                     </div>
                 </div>
 
+                <!-- ITUB -->
                 <div class="asset-row" id="row-ITUB">
                     <div class="asset-ticker c-blue">ITUB</div>
                     <div class="asset-company">Itaú Unibanco</div>
@@ -472,6 +493,7 @@
                     </div>
                 </div>
 
+                <!-- BBDC -->
                 <div class="asset-row" id="row-BBDC">
                     <div class="asset-ticker c-blue">BBDC</div>
                     <div class="asset-company">Bradesco</div>
@@ -485,6 +507,7 @@
                     </div>
                 </div>
 
+                <!-- BBAS -->
                 <div class="asset-row" id="row-BBAS">
                     <div class="asset-ticker c-blue">BBAS</div>
                     <div class="asset-company">Banco do Brasil</div>
@@ -498,6 +521,7 @@
                     </div>
                 </div>
 
+                <!-- B3 -->
                 <div class="asset-row" id="row-B3">
                     <div class="asset-ticker c-blue">B3SA</div>
                     <div class="asset-company">B3 S.A.</div>
@@ -520,20 +544,24 @@
 
     </div>
 
+    <!-- PAINEL CENTRAL DE FÓRMULAS -->
     <div class="formula-panel">
         <div class="formula-title">Detalhamento Matemático Estruturado</div>
         <div class="formula-flex" style="margin-bottom: 8px;" id="formula-macro-container"></div>
         <div class="formula-flex" id="formula-adr-container"></div>
     </div>
 
+    <!-- RECIPIENTE UNIFICADO DO COCKPIT (LADO A LADO) -->
     <div class="unified-dashboard">
         
+        <!-- Coluna 1: Balanço Geral Consolidado -->
         <div class="column-border">
-            <div class="display-title">SOMA GLOBAL CONSULIDADA</div>
+            <div class="display-title">SOMA GLOBAL CONSOLIDADA</div>
             <h1 class="display-value" id="total-display">+0.0%</h1>
             <div class="display-status" id="status-display">NEUTRO - AGUARDAR</div>
         </div>
 
+        <!-- Coluna 2: Classificação da Pressão de Abertura -->
         <div class="column-border">
             <table class="var-table">
                 <thead>
@@ -563,14 +591,15 @@
             </table>
         </div>
 
+        <!-- Coluna 3: Tomada de Decisão Estratégica -->
         <div class="strat-box">
             <div class="strat-item" id="strat-pos">
-                <div class="strat-header c-green">↑ VIÉS COMPRADOR (BULLISH)</div>
+                <div class="strat-header c-green">↑ DIRESSAO COMPRADORA </div>
                 <div style="color: var(--text-muted);">As pressões correlacionadas apontam alta. Priorize defesas em suportes relevantes.</div>
             </div>
 
             <div class="strat-item" id="strat-neg">
-                <div class="strat-header c-pink">↓ VIÉS VENDEDOR (BEARISH)</div>
+                <div class="strat-header c-pink">↓ Diressao VENDEDORA </div>
                 <div style="color: var(--text-muted);">Macro e ADRs apontam correção. Busque gatilhos de venda em regiões de resistência.</div>
             </div>
 
@@ -584,8 +613,8 @@
 </div>
 
 <script>
-    const idsMacro = ['val-vix', 'val-fef', 'val-cl1'];
-    const tickersMacro = ['VIX', 'FEF', 'CL1'];
+    const idsMacro = ['val-vix', 'val-fef', 'val-cl1', 'val-dxy'];
+    const tickersMacro = ['VIX', 'FEF', 'CL1', 'DXY'];
 
     const idsADRs = ['val-vale', 'val-pbr', 'val-itub', 'val-bbdc', 'val-bbas', 'val-b3'];
     const tickersADRs = ['VALE', 'PBR', 'ITUB', 'BBDC', 'BBAS', 'B3'];
@@ -612,7 +641,7 @@
         calcularTudo();
     }
 
-    function colorirLinha(idElemento, valor, tickerOriginal) {
+    function colorirLinha(idElemento, valor) {
         let row = document.getElementById(idElemento);
         let text = row.querySelector('.asset-ticker');
         if(valor > 0) {
@@ -634,11 +663,14 @@
         let htmlMacro = '<span class="formula-sub-title">Macro:</span>';
         let htmlADRs = '<span class="formula-sub-title">ADRs:</span>';
 
-        // Processa Bloco Macro
+        // Processa Bloco Macro (VIX e DXY invertem o impacto na bolsa)
         idsMacro.forEach((id, idx) => {
             let v = parseFloat(document.getElementById(id).value) || 0;
-            // O VIX opera invertido no mercado (VIX caindo é positivo para a bolsa), logo invertemos o sinal dele para o cálculo consolidado
-            let pesoEfetivo = (tickersMacro[idx] === 'VIX') ? -v : v;
+            
+            let pesoEfetivo = v;
+            if (tickersMacro[idx] === 'VIX' || tickersMacro[idx] === 'DXY') {
+                pesoEfetivo = -v; 
+            }
             somaMacro += pesoEfetivo;
 
             colorirLinha('row-' + tickersMacro[idx], v);
@@ -660,11 +692,11 @@
         });
         htmlADRs += ` = <span>${somaADRs >= 0 ? '+':''}${somaADRs.toFixed(1)}%</span>`;
 
-        // Renderiza as fórmulas na tela
+        // Renderiza as fórmulas
         document.getElementById('formula-macro-container').innerHTML = htmlMacro;
         document.getElementById('formula-adr-container').innerHTML = htmlADRs;
 
-        // CÁCULO GLOBAL CONSOLIDADO (Fusão dos dois cenários)
+        // CÁLCULO GLOBAL CONSOLIDADO
         let somaGlobal = somaMacro + somaADRs;
         let absGlobal = Math.abs(somaGlobal);
 
@@ -682,7 +714,7 @@
         document.getElementById('strat-neg').classList.remove('active');
         document.getElementById('strat-lat').classList.remove('active');
 
-        // Define a Estratégia Direcional baseada no saldo consolidado
+        // Estratégia Direcional
         let statusText = "CONSOLIDAÇÃO";
         if (somaGlobal > 0.2) {
             document.getElementById('strat-pos').classList.add('active');
@@ -695,7 +727,7 @@
             statusText = "NEUTRO - AGUARDAR";
         }
 
-        // Define as Faixas de Intensidade (Calibradas para a fusão dos dois blocos)
+        // Faixas de Intensidade
         if (absGlobal < 1.5) {
             document.getElementById('row-lateral').classList.add('active', 'row-active-style');
         } else if (absGlobal <= 3.5) {
@@ -712,7 +744,6 @@
         document.getElementById('status-display').innerText = statusText;
     }
 
-    // Inicialização automática
     calcularTudo();
 </script>
 
