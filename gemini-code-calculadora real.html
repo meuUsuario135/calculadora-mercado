@@ -305,8 +305,18 @@
             </div>
         </div>
 
+        <div class="asset-row">
+            <div class="asset-name">DXY</div>
+            <div class="input-group">
+                <button class="btn-step" onclick="alterar('dxy', -0.1)">-</button>
+                <input type="number" id="dxy" class="asset-input" value="0.0" step="0.1" oninput="calcular()">
+                <span class="input-suffix">%</span>
+                <button class="btn-step" onclick="alterar('dxy', 0.1)">+</button>
+            </div>
+        </div>
+
         <div class="formula-preview" id="formula-text">
-            (<span style="color: var(--neon-blue);">+0.00%</span>) + <span style="color: var(--neon-blue);">0.00%</span> + <span style="color: var(--neon-blue);">0.00%</span> = <span style="color: var(--neon-yellow);">+0.00%</span>
+            (<span style="color: var(--neon-blue);">+0.00%</span>) + <span style="color: var(--neon-blue);">0.00%</span> + <span style="color: var(--neon-blue);">0.00%</span> - <span style="color: var(--neon-blue);">0.00%</span> = <span style="color: var(--neon-yellow);">+0.00%</span>
         </div>
 
         <div class="display-box">
@@ -381,14 +391,15 @@
         document.getElementById('vix').value = "0.0";
         document.getElementById('fef2').value = "0.0";
         document.getElementById('cl1').value = "0.0";
+        document.getElementById('dxy').value = "0.0"; // Reset do DXY
         calcular();
     }
 
     function randomizar() {
-        // Gera valores aleatórios entre -3% e +3% para testar o painel dinâmico
         document.getElementById('vix').value = ((Math.random() * 6) - 3).toFixed(1);
         document.getElementById('fef2').value = ((Math.random() * 6) - 3).toFixed(1);
         document.getElementById('cl1').value = ((Math.random() * 6) - 3).toFixed(1);
+        document.getElementById('dxy').value = ((Math.random() * 6) - 3).toFixed(1); // Random do DXY
         calcular();
     }
 
@@ -396,20 +407,25 @@
         let vix = parseFloat(document.getElementById('vix').value) || 0;
         let fef2 = parseFloat(document.getElementById('fef2').value) || 0;
         let cl1 = parseFloat(document.getElementById('cl1').value) || 0;
+        let dxy = parseFloat(document.getElementById('dxy').value) || 0; // Leitura do DXY
 
-        let total = vix + fef2 + cl1;
+        // IMPORTANTE: DXY subtrai do total devido à correlação inversa com o mercado
+        let total = vix + fef2 + cl1 - dxy; 
         let absTotal = Math.abs(total);
 
-        // Atualiza a linha da fórmula
+        // Formatação das strings de exibição
         let formatVix = (vix >= 0 ? "+" : "") + vix.toFixed(2) + "%";
         let formatFef2 = (fef2 >= 0 ? "+" : "") + fef2.toFixed(2) + "%";
         let formatCl1 = (cl1 >= 0 ? "+" : "") + cl1.toFixed(2) + "%";
+        let formatDxy = (dxy >= 0 ? "+" : "") + dxy.toFixed(2) + "%";
         let formatTotal = (total >= 0 ? "+" : "") + total.toFixed(2) + "%";
 
+        // Montagem visual da linha de fórmula incluindo a subtração do DXY
         document.getElementById('formula-text').innerHTML = 
             `(<span style="color: ${vix >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatVix}</span>) + ` +
             `<span style="color: ${fef2 >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatFef2}</span> + ` +
-            `<span style="color: ${cl1 >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatCl1}</span> = ` +
+            `<span style="color: ${cl1 >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatCl1}</span> - ` +
+            `<span style="color: ${dxy >= 0 ? 'var(--neon-blue)' : 'var(--neon-pink)'}">${formatDxy}</span> = ` +
             `<span style="color: var(--neon-yellow);">${formatTotal}</span>`;
 
         // Display Central
