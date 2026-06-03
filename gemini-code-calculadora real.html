@@ -1,6 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Análise Pré-Market</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0c0f16;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            border-bottom: 2px solid #1e222d;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #2962ff;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 15px 0 5px 0;
+            color: #b2b5be;
+        }
+        /* Ajuste fino para os blocos de widgets */
+        .widget-block {
+            margin-bottom: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #131722;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <div class="header">
+            <h1>Dashboard de Análise Pré-Market</h1>
+        </div>
+
+        <!-- SEÇÃO 1: MACRO DRIVERS -->
+        <div class="section-title">🎲 Rand Macro</div>
+        <div class="widget-block">
+            <!-- TRADINGVIEW WIDGET: MACRO DRIVERS -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                {
+                "colorTheme": "dark",
+                "dateRange": "1D",
+                "showChart": false,
+                "locale": "br",
+                "width": "100%",
+                "height": "220",
+                "largeChartUrl": "",
+                "isTransparent": true,
+                "showSymbolLogo": true,
+                "showFloatingTooltip": false,
+                "tabs": [
+                  {
+                    "title": "Drivers Globais",
+                    "symbols": [
+                      { "s": "VIX", "d": "VIX - Volatilidade" },
+                      { "s": "SGX:FEF2!", "d": "Minério de Ferro (SGX)" },
+                      { "s": "TVC:CL1!", "d": "Petróleo Bruto WTI" },
+                      { "s": "TVC:DXY", "d": "Índice Dólar Global" }
+                    ],
+                    "originalTitle": "Forex"
+                  }
+                ]
+              }
+                </script>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 2: FLUXO MICRO -->
+        <div class="section-title">🇧🇷 Fluxo Micro (ADRs Brasileiras e B3)</div>
+        <div class="widget-block">
+            <!-- TRADINGVIEW WIDGET: ADRS & FLUXO -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                {
+                "colorTheme": "dark",
+                "dateRange": "1D",
+                "showChart": false,
+                "locale": "br",
+                "width": "100%",
+                "height": "280",
+                "largeChartUrl": "",
+                "isTransparent": true,
+                "showSymbolLogo": true,
+                "showFloatingTooltip": false,
+                "tabs": [
+                  {
+                    "title": "Ações e Fluxo",
+                    "symbols": [
+                      { "s": "NYSE:VALE", "d": "VALE - Vale SA (ADR)" },
+                      { "s": "NYSE:PBR", "d": "PBR - Petrobras (ADR)" },
+                      { "s": "NYSE:ITUB", "d": "ITUB - Itaú Unibanco (ADR)" },
+                      { "s": "NYSE:BBD", "d": "BBDC - Bradesco (ADR)" },
+                      { "s": "BMFBOVESPA:BBAS3", "d": "BBAS - Banco do Brasil" },
+                      { "s": "BMFBOVESPA:B3SA3", "d": "B3SA - B3 S.A." }
+                    ],
+                    "originalTitle": "Indices"
+                  }
+                ]
+              }
+                </script>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
     <meta http-equiv="refresh" content="30">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
