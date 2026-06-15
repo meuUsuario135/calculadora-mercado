@@ -3,49 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pro - Pré-Market Simulator (Com DXY)</title>
+    <title>Dashboard de Análise Pré-Market</title>
     <style>
+        /* Variáveis de Tema Global Neon/Dark Baseados na Imagem */
         :root {
-            --bg-color: #0b0e14;
-            --card-bg: #111622;
-            --border-color: #1a2236;
-            --text-color: #ffffff;
-            --text-muted: #53638c;
+            --bg-main: #060b13;
+            --bg-card: #0b111e;
+            --border-color: #162235;
+            --text-main: #f8fafc;
+            --text-muted: #4e6178;
+            --neon-blue: #00d2ff;
             --neon-green: #00ffaa;
-            --neon-blue: #00e5ff;
-            --neon-pink: #ff4a6b;
-            --neon-yellow: #ffea00;
+            --neon-pink: #ff3355;
+            --bg-input: #04070d;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
         }
 
         .dashboard-wrapper {
-            width: 100%;
             max-width: 1200px;
+            margin: 0 auto;
         }
 
         .dash-header {
-            text-align: center;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
             font-size: 18px;
-            color: var(--neon-blue);
-            font-weight: 900;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            color: #00d2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        /* GRID PRINCIPAL: LADO A LADO */
         .top-grid-columns {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
@@ -60,11 +58,10 @@
         }
 
         .main-panel {
-            background-color: var(--card-bg);
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 6px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -73,52 +70,48 @@
         .panel-title {
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--neon-blue);
+            letter-spacing: 1px;
+            color: #00d2ff;
             font-weight: bold;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .table-header {
             display: grid;
-            grid-template-columns: 1.5fr 1.5fr 1.5fr;
+            grid-template-columns: 1.2fr 1.5fr 1.2fr;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             color: var(--text-muted);
-            padding-bottom: 8px;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(22, 34, 53, 0.5);
+            margin-bottom: 5px;
         }
 
         .text-right { text-align: right; }
 
         .asset-row {
             display: grid;
-            grid-template-columns: 1.5fr 1.5fr 1.5fr;
+            grid-template-columns: 1.2fr 1.5fr 1.2fr;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.02);
-            transition: background 0.2s;
-        }
-
-        .asset-row:hover {
-            background: rgba(255,255,255,0.01);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(22, 34, 53, 0.3);
         }
 
         .asset-ticker {
-            font-weight: 900;
-            font-size: 15px;
-            letter-spacing: 0.5px;
+            font-weight: bold;
+            font-size: 14px;
         }
 
         .asset-company {
-            color: var(--text-muted);
+            color: #46566d;
             font-size: 12px;
         }
 
-        /* Inputs */
+        /* CONTROLES DE INPUT */
         .input-control {
             display: flex;
             align-items: center;
@@ -128,35 +121,40 @@
         .input-group {
             display: flex;
             align-items: center;
-            background: #07090e;
+            background: var(--bg-input);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 4px;
             overflow: hidden;
+            padding: 2px;
         }
 
         .btn-step {
             background: transparent;
             border: none;
-            color: var(--text-muted);
-            font-size: 16px;
-            width: 28px;
-            height: 28px;
+            color: #46566d;
+            font-size: 14px;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-step:hover {
-            color: var(--text-color);
+            color: var(--text-main);
             background: rgba(255,255,255,0.05);
         }
 
         .asset-input {
             background: transparent;
             border: none;
-            color: var(--text-color);
+            color: var(--text-main);
             text-align: center;
-            width: 55px;
-            font-size: 14px;
+            width: 45px;
+            font-size: 13px;
             font-weight: bold;
             outline: none;
         }
@@ -168,196 +166,228 @@
         }
 
         .input-suffix {
-            color: var(--text-muted);
-            padding-right: 6px;
+            color: #46566d;
+            padding-right: 4px;
             font-size: 11px;
         }
 
-        .action-bar {
+        .panel-footer-buttons {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 15px;
+            padding-top: 15px;
         }
 
         .btn-action {
-            background: #181f33;
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 5px 12px;
+            background: #111a2e;
+            border: 1px solid #1e2d4a;
+            color: #617796;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
+            transition: 0.2s;
         }
 
         .btn-action:hover {
-            color: var(--text-color);
-            background: #222b47;
+            background: #16223d;
+            color: #a3b8cc;
+            border-color: #283d63;
         }
 
-        /* FÓRMULA RESUMIDA */
-        .formula-panel {
-            background-color: var(--card-bg);
+        /* DETALHAMENTO MATEMÁTICO */
+        .math-detail-panel {
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px 20px;
+            border-radius: 6px;
+            padding: 15px 20px;
             margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 13px;
         }
 
-        .formula-title {
+        .math-title {
             font-size: 10px;
+            color: #46566d;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
-        .formula-flex {
+        .math-line {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
             gap: 6px;
-            font-size: 13px;
-            color: var(--text-muted);
+            margin-bottom: 6px;
+            flex-wrap: wrap;
         }
 
-        .formula-sub-title {
+        .math-label {
             font-weight: bold;
-            color: var(--text-color);
-            margin-right: 5px;
+            min-width: 60px;
         }
 
-        .formula-box {
-            background: rgba(7, 9, 14, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 4px 8px;
+        .math-badge {
+            padding: 2px 6px;
+            border-radius: 3px;
             font-weight: bold;
-            font-family: monospace;
+            background: #04070d;
+            border: 1px solid #121b2b;
         }
 
-        /* RECIPIENTE UNIFICADO INFERIOR */
-        .unified-dashboard {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 25px;
+        /* ESTRUTURA DO VELOCÍMETRO E RESULTADOS */
+        .dashboard-row {
             display: grid;
             grid-template-columns: 1.2fr 1.1fr 1.7fr;
-            gap: 30px;
-            align-items: center;
+            gap: 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
         }
 
         @media (max-width: 850px) {
-            .unified-dashboard {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
+            .dashboard-row { grid-template-columns: 1fr; }
             .column-border {
-                border: none !important;
-                padding: 0 !important;
+                border-right: none !important;
+                padding-right: 0 !important;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 20px;
             }
+            .column-border:last-child { border-bottom: none; }
         }
 
         .column-border {
-            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            border-right: 1px solid var(--border-color);
             padding-right: 20px;
-            height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+        }
+
+        .column-border:last-child {
+            border-right: none;
+            padding-right: 0;
+            padding-left: 10px;
         }
 
         .display-title {
             font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-weight: 700;
             color: var(--text-muted);
-            margin-bottom: 5px;
-            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
         }
 
-        .display-value {
-            font-size: 42px;
+        /* VELOCÍMETRO */
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .gauge-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #needle {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: 120px 115px;
+        }
+
+        .total-percentage {
+            position: absolute;
+            top: 95px; 
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 26px;
             font-weight: 900;
-            color: var(--neon-green);
-            margin: 0;
-            line-height: 1.1;
-            text-shadow: 0 0 15px rgba(0, 255, 170, 0.2);
+            font-family: monospace;
+            letter-spacing: -0.5px;
         }
 
         .display-status {
-            font-size: 11px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 800;
             letter-spacing: 1px;
-            color: var(--neon-yellow);
-            margin-top: 5px;
-            font-weight: bold;
+            text-align: center;
             text-transform: uppercase;
         }
 
-        /* Tabela de Variação */
-        .var-table {
+        /* Cores de Sinalização */
+        .c-green { color: var(--neon-green) !important; }
+        .c-pink { color: var(--neon-pink) !important; }
+        .c-blue { color: var(--neon-blue) !important; }
+        .c-white { color: #ffffff !important; }
+
+        /* TABELA DE INTENSIDADE */
+        .intensity-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
         }
 
-        .var-table th {
-            text-align: left;
-            color: var(--text-muted);
+        .intensity-table th {
             font-size: 10px;
+            color: var(--text-muted);
+            text-align: left;
+            padding-bottom: 10px;
             text-transform: uppercase;
-            padding-bottom: 6px;
+            letter-spacing: 1px;
         }
 
-        .var-row {
-            opacity: 0.3;
-            transition: 0.2s;
+        .intensity-table th:last-child { text-align: right; }
+
+        .intensity-table td {
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: #243142;
+            border-bottom: 1px solid #121b2b;
+            transition: color 0.3s;
         }
 
-        .var-row.active {
+        .intensity-table td:last-child { text-align: right; }
+
+        .intensity-table tr.row-active-style td {
+            color: var(--text-main);
+        }
+        .intensity-table tr.row-active-style td.val-highlight {
+            font-weight: 900;
+            color: var(--neon-blue);
+        }
+
+        /* VIÉS OPERACIONAL */
+        .bias-box {
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            opacity: 0.15;
+            transition: opacity 0.3s ease;
+        }
+
+        .bias-box.active {
             opacity: 1;
-            font-weight: bold;
         }
 
-        .var-row td {
-            padding: 7px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.02);
+        .bias-title {
+            font-weight: 800;
+            margin-bottom: 3px;
         }
 
-        /* Tomada de Decisão */
-        .strat-box {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .strat-item {
+        .bias-desc {
+            color: #748da6;
             font-size: 12px;
-            line-height: 1.4;
-            opacity: 0.3;
-            transition: 0.2s;
         }
-
-        .strat-item.active {
-            opacity: 1;
-        }
-
-        .strat-header {
-            font-weight: bold;
-            margin-bottom: 1px;
-        }
-
-        /* Classes Utilitárias */
-        .c-green { color: var(--neon-green) !important; }
-        .c-blue { color: var(--neon-blue) !important; }
-        .c-pink { color: var(--neon-pink) !important; }
-        .row-active-style { background: rgba(255,255,255,0.02); }
-
     </style>
 </head>
 <body>
@@ -366,36 +396,32 @@
     
     <div class="dash-header">💻 Dashboard de Análise Pré-Market</div>
 
-    <!-- PAINÉIS SUPERIORES LADO A LADO -->
     <div class="top-grid-columns">
         
-        <!-- COLUNA ESQUERDA: ATIVOS GLOBAIS (MACRO) -->
         <div class="main-panel">
             <div>
-                <div class="panel-title">🌎 Filtro Macro / Volatilidade</div>
+                <div class="panel-title">🔵 Filtro Macro / Volatilidade</div>
                 <div class="table-header">
                     <div>Ativo</div>
                     <div>Referência</div>
                     <div class="text-right">Variação</div>
                 </div>
 
-                <!-- VIX -->
-                <div class="asset-row" id="row-VIX">
-                    <div class="asset-ticker c-blue">VIX</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-vix">VIX</div>
                     <div class="asset-company">Volatilidade</div>
                     <div class="input-control">
                         <div class="input-group">
                             <button class="btn-step" onclick="alterar('val-vix', -0.1)">-</button>
-                            <input type="number" id="val-vix" class="asset-input" value="-1.2" step="0.1" oninput="calcularTudo()">
+                            <input type="number" id="val-vix" class="asset-input" value="1.4" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
                             <button class="btn-step" onclick="alterar('val-vix', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- FEF2! -->
-                <div class="asset-row" id="row-FEF">
-                    <div class="asset-ticker c-blue">FEF2!</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-fef">FEF2!</div>
                     <div class="asset-company">Minério de Ferro</div>
                     <div class="input-control">
                         <div class="input-group">
@@ -407,23 +433,21 @@
                     </div>
                 </div>
 
-                <!-- CL1! -->
-                <div class="asset-row" id="row-CL1">
-                    <div class="asset-ticker c-blue">CL1!</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-pink" id="name-cl1">CL1!</div>
                     <div class="asset-company">Petróleo Bruto</div>
                     <div class="input-control">
                         <div class="input-group">
                             <button class="btn-step" onclick="alterar('val-cl1', -0.1)">-</button>
-                            <input type="number" id="val-cl1" class="asset-input" value="-0.5" step="0.1" oninput="calcularTudo()">
+                            <input type="number" id="val-cl1" class="asset-input" value="-2.7" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
                             <button class="btn-step" onclick="alterar('val-cl1', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- DXY -->
-                <div class="asset-row" id="row-DXY">
-                    <div class="asset-ticker c-blue">DXY</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-dxy">DXY</div>
                     <div class="asset-company">Índice Dólar Global</div>
                     <div class="input-control">
                         <div class="input-group">
@@ -435,13 +459,12 @@
                     </div>
                 </div>
             </div>
-
-            <div class="action-bar">
-                <button class="btn-action" onclick="randomizarMacro()">🎲 Rand Macro</button>
+            <div class="panel-footer-buttons">
+                <button class="btn-action" onclick="buscarCotacoesApi()">🔄 Atualizar via API</button>
+                <button class="btn-action" onclick="randomizarGrupo('macro')">🎲 Rand Macro</button>
             </div>
         </div>
 
-        <!-- COLUNA DIREITA: MONITOR DE ADRs (MICRO) -->
         <div class="main-panel">
             <div>
                 <div class="panel-title">🇧🇷 Fluxo Micro (ADRs Brasileiras)</div>
@@ -451,65 +474,60 @@
                     <div class="text-right">Variação</div>
                 </div>
 
-                <!-- VALE -->
-                <div class="asset-row" id="row-VALE">
-                    <div class="asset-ticker c-blue">VALE</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-vale">VALE</div>
                     <div class="asset-company">Vale SA</div>
                     <div class="input-control">
                         <div class="input-group">
                             <button class="btn-step" onclick="alterar('val-vale', -0.1)">-</button>
-                            <input type="number" id="val-vale" class="asset-input" value="1.1" step="0.1" oninput="calcularTudo()">
+                            <input type="number" id="val-vale" class="asset-input" value="0.1" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
                             <button class="btn-step" onclick="alterar('val-vale', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- PBR -->
-                <div class="asset-row" id="row-PBR">
-                    <div class="asset-ticker c-blue">PBR</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-pbr">PBR</div>
                     <div class="asset-company">Petrobras</div>
                     <div class="input-control">
                         <div class="input-group">
                             <button class="btn-step" onclick="alterar('val-pbr', -0.1)">-</button>
-                            <input type="number" id="val-pbr" class="asset-input" value="2.5" step="0.1" oninput="calcularTudo()">
+                            <input type="number" id="val-pbr" class="asset-input" value="0.5" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
                             <button class="btn-step" onclick="alterar('val-pbr', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- ITUB -->
-                <div class="asset-row" id="row-ITUB">
-                    <div class="asset-ticker c-blue">ITUB</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-itub">ITUB</div>
                     <div class="asset-company">Itaú Unibanco</div>
                     <div class="input-control">
                         <div class="input-group">
                             <button class="btn-step" onclick="alterar('val-itub', -0.1)">-</button>
-                            <input type="number" id="val-itub" class="asset-input" value="1.8" step="0.1" oninput="calcularTudo()">
+                            <input type="number" id="val-itub" class="asset-input" value="0.8" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
                             <button class="btn-step" onclick="alterar('val-itub', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- BBDC -->
-                <div class="asset-row" id="row-BBDC">
-                    <div class="asset-ticker c-blue">BBDC</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-bbdc">BBDC</div>
                     <div class="asset-company">Bradesco</div>
                     <div class="input-control">
                         <div class="input-group">
                             <button class="btn-step" onclick="alterar('val-bbdc', -0.1)">-</button>
-                            <input type="number" id="val-bbdc" class="asset-input" value="-0.8" step="0.1" oninput="calcularTudo()">
+                            <input type="number" id="val-bbdc" class="asset-input" value="0.8" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
                             <button class="btn-step" onclick="alterar('val-bbdc', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- BBAS -->
-                <div class="asset-row" id="row-BBAS">
-                    <div class="asset-ticker c-blue">BBAS</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-bbas">BBAS</div>
                     <div class="asset-company">Banco do Brasil</div>
                     <div class="input-control">
                         <div class="input-group">
@@ -521,230 +539,302 @@
                     </div>
                 </div>
 
-                <!-- B3 -->
-                <div class="asset-row" id="row-B3">
-                    <div class="asset-ticker c-blue">B3SA</div>
+                <div class="asset-row">
+                    <div class="asset-ticker c-green" id="name-b3sa">B3SA</div>
                     <div class="asset-company">B3 S.A.</div>
                     <div class="input-control">
                         <div class="input-group">
-                            <button class="btn-step" onclick="alterar('val-b3', -0.1)">-</button>
-                            <input type="number" id="val-b3" class="asset-input" value="0.5" step="0.1" oninput="calcularTudo()">
+                            <button class="btn-step" onclick="alterar('val-b3sa', -0.1)">-</button>
+                            <input type="number" id="val-b3sa" class="asset-input" value="0.5" step="0.1" oninput="calcularTudo()">
                             <span class="input-suffix">%</span>
-                            <button class="btn-step" onclick="alterar('val-b3', 0.1)">+</button>
+                            <button class="btn-step" onclick="alterar('val-b3sa', 0.1)">+</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="action-bar">
-                <button class="btn-action" onclick="randomizarADRs()">🎲 Rand ADRs</button>
-                <button class="btn-action" onclick="limparTudo()">Limpar Tudo</button>
+            <div class="panel-footer-buttons">
+                <button class="btn-action" onclick="randomizarGrupo('adrs')">🎲 Rand ADRs</button>
+                <button class="btn-action" onclick="limparTudo()" style="background: #24141e; border-color: #3d1d2b; color: #a8677b;">Limpar Tudo</button>
             </div>
         </div>
 
     </div>
 
-    <!-- PAINEL CENTRAL DE FÓRMULAS -->
-    <div class="formula-panel">
-        <div class="formula-title">Detalhamento Matemático Estruturado</div>
-        <div class="formula-flex" style="margin-bottom: 8px;" id="formula-macro-container"></div>
-        <div class="formula-flex" id="formula-adr-container"></div>
+    <div class="math-detail-panel">
+        <div class="math-title">Detalhamento Matemático Estruturado</div>
+        <div class="math-line">
+            <span class="math-label">Macro:</span>
+            <span id="math-macro-expr"></span>
+            <span class="c-white" id="math-macro-res"> = 0.0%</span>
+        </div>
+        <div class="math-line">
+            <span class="math-label">ADRs:</span>
+            <span id="math-adrs-expr"></span>
+            <span class="c-white" id="math-adrs-res"> = 0.0%</span>
+        </div>
     </div>
 
-    <!-- RECIPIENTE UNIFICADO DO COCKPIT (LADO A LADO) -->
-    <div class="unified-dashboard">
+    <div class="dashboard-row">
         
-        <!-- Coluna 1: Balanço Geral Consolidado -->
         <div class="column-border">
             <div class="display-title">SOMA GLOBAL CONSOLIDADA</div>
-            <h1 class="display-value" id="total-display">+0.0%</h1>
+            
+            <div class="gauge-container">
+                <svg class="gauge-svg" viewBox="0 0 240 140">
+                    <defs>
+                        <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ff3355" />   
+                            <stop offset="35%" stop-color="#ff9f43" />  
+                            <stop offset="50%" stop-color="#1e2d4a" />  
+                            <stop offset="65%" stop-color="#ffea00" />  
+                            <stop offset="100%" stop-color="#00ffaa" /> 
+                        </linearGradient>
+                    </defs>
+                    
+                    <path d="M 40 115 A 80 80 0 0 1 200 115" fill="none" stroke="url(#gauge-gradient)" stroke-width="12" stroke-linecap="round"/>
+                    
+                    <line x1="120" y1="35" x2="120" y2="45" stroke="#060b13" stroke-width="2" /> 
+                    <line x1="63.5" y1="58.5" x2="71.5" y2="65.5" stroke="#060b13" stroke-width="2" /> 
+                    <line x1="176.5" y1="58.5" x2="168.5" y2="65.5" stroke="#060b13" stroke-width="2" /> 
+
+                    <text x="120" y="24" font-size="8" font-weight="900" fill="#4e6178" text-anchor="middle" letter-spacing="0.5">NEUTRA</text>
+                    <text x="52" y="50" font-size="7" font-weight="900" fill="#ff9f43" text-anchor="end">BAIXA</text>
+                    <text x="188" y="50" font-size="7" font-weight="900" fill="#ffea00" text-anchor="start">ALTA</text>
+                    <text x="32" y="132" font-size="7" font-weight="900" fill="#ff3355" text-anchor="middle">BAIXA FORTE</text>
+                    <text x="208" y="132" font-size="7" font-weight="900" fill="#00ffaa" text-anchor="middle">ALTA FORTE</text>
+
+                    <g id="needle">
+                        <polygon points="118.5,115 120,40 121.5,115" fill="#ffffff" />
+                        <circle cx="120" cy="115" r="5" fill="#ffffff" />
+                    </g>
+                </svg>
+                
+                <div id="total-display" class="total-percentage">+0.0%</div>
+            </div>
+
             <div class="display-status" id="status-display">NEUTRO - AGUARDAR</div>
         </div>
 
-        <!-- Coluna 2: Classificação da Pressão de Abertura -->
         <div class="column-border">
-            <table class="var-table">
+            <div class="display-title">Mapeamento de Intensidade</div>
+            <table class="intensity-table">
                 <thead>
                     <tr>
                         <th>Variação Acumulada</th>
-                        <th class="text-right">Intensidade</th>
+                        <th>Intensidade</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="var-row" id="row-lateral">
+                    <tr id="row-lateral">
                         <td>&lt; 1,5%</td>
-                        <td class="text-right" style="color: var(--text-muted);">Lateralizada</td>
+                        <td class="val-highlight">Lateralizada</td>
                     </tr>
-                    <tr class="var-row" id="row-fraca">
+                    <tr id="row-fraca">
                         <td>1,5% - 3,5%</td>
-                        <td class="text-right c-blue">Expressão Fraca</td>
+                        <td class="val-highlight">Expressão Fraca</td>
                     </tr>
-                    <tr class="var-row" id="row-moderada">
+                    <tr id="row-moderada">
                         <td>3,5% - 6,5%</td>
-                        <td class="text-right c-blue">Moderada</td>
+                        <td class="val-highlight">Moderada</td>
                     </tr>
-                    <tr class="var-row" id="row-forte">
+                    <tr id="row-forte">
                         <td>&gt; 6,5%</td>
-                        <td class="text-right c-blue" style="font-weight:900;">FORTE IMPULSO</td>
+                        <td class="val-highlight">Forte Impulso</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Coluna 3: Tomada de Decisão Estratégica -->
-        <div class="strat-box">
-            <div class="strat-item" id="strat-pos">
-                <div class="strat-header c-green">↑ VIÉS COMPRADOR (BULLISH)</div>
-                <div style="color: var(--text-muted);">As pressões correlacionadas apontam alta. Priorize defesas em suportes relevantes.</div>
+        <div class="column-border">
+            <div class="display-title">Viés Estratégico</div>
+            
+            <div class="bias-box" id="strat-pos">
+                <div class="bias-title" style="color: var(--neon-green);">↑ VIÉS COMPRADOR (BULLISH)</div>
+                <div class="bias-desc">As pressões correlacionadas apontam alta. Priorize defesas em suportes relevantes.</div>
             </div>
 
-            <div class="strat-item" id="strat-neg">
-                <div class="strat-header c-pink">↓ VIÉS VENDEDOR (BEARISH)</div>
-                <div style="color: var(--text-muted);">Macro e ADRs apontam correção. Busque gatilhos de venda em regiões de resistência.</div>
+            <div class="bias-box" id="strat-neg">
+                <div class="bias-title" style="color: var(--neon-pink);">↓ VIÉS VENDEDOR (BEARISH)</div>
+                <div class="bias-desc">Macro e ADRs apontam correção. Busque gatilhos de venda em regiões de resistência.</div>
             </div>
 
-            <div class="strat-item" id="strat-lat">
-                <div class="strat-header c-blue">↔ MERCADO EM EQUILÍBRIO (RANGE)</div>
-                <div style="color: var(--text-muted);">Falta de direcionalidade clara. Opere extremidades curtíssimas ou aguarde o fluxo entrar.</div>
+            <div class="bias-box" id="strat-lat">
+                <div class="bias-title" style="color: var(--neon-blue);">↔ MERCADO EM EQUILÍBRIO (RANGE)</div>
+                <div class="bias-desc">Falta de direcionalidade clara. Opere extremidades curtíssimas ou aguarde o fluxo entrar.</div>
             </div>
         </div>
 
     </div>
+
 </div>
 
 <script>
-    const idsMacro = ['val-vix', 'val-fef', 'val-cl1', 'val-dxy'];
-    const tickersMacro = ['VIX', 'FEF', 'CL1', 'DXY'];
+    const ativosConfig = {
+        macro: ['vix', 'fef', 'cl1', 'dxy'],
+        adrs: ['vale', 'pbr', 'itub', 'bbdc', 'bbas', 'b3sa']
+    };
 
-    const idsADRs = ['val-vale', 'val-pbr', 'val-itub', 'val-bbdc', 'val-bbas', 'val-b3'];
-    const tickersADRs = ['VALE', 'PBR', 'ITUB', 'BBDC', 'BBAS', 'B3'];
+    // NOVA FUNÇÃO: Busca dados na API e atualiza os inputs do Dashboard automaticamente
+    async function buscarCotacoesApi() {
+        try {
+            // Buscando as variações de mercado (Dólar Comercial serve de parâmetro inicial para o DXY local se desejado)
+            // Nota: Como a API gratuita fornece Moedas principais, usaremos a variação percentual delas para alimentar o painel de moedas.
+            const resposta = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL');
+            const dados = await resposta.json();
+            
+            if(dados && dados.USDBRL) {
+                // Captura a variação percentual diária (pctChange) do Dólar comercial da API
+                let varDolar = parseFloat(dados.USDBRL.pctChange);
+                
+                // Atualiza o input do DXY automaticamente com a variação capturada
+                document.getElementById('val-dxy').value = varDolar.toFixed(1);
+            }
+            
+            // Após puxar os dados atualizados da API, roda a esteira matemática do velocímetro
+            calcularTudo();
+            
+        } catch (erro) {
+            console.error("Erro ao sincronizar dados da AwesomeAPI:", erro);
+            // Se falhar, roda o cálculo com os valores padrões salvos no HTML
+            calcularTudo();
+        }
+    }
 
-    function alterar(id, valor) {
+    function alterar(id, delta) {
         let input = document.getElementById(id);
-        let atual = parseFloat(input.value) || 0;
-        input.value = (atual + valor).toFixed(1);
+        let valorAtual = parseFloat(input.value) || 0;
+        input.value = (valorAtual + delta).toFixed(1);
+        colorirTicker(id, valorAtual + delta);
+        calcularTudo();
+    }
+
+    function colorirTicker(id, valor) {
+        let tickerId = id.replace('val-', 'name-');
+        let elemento = document.getElementById(tickerId);
+        if(!elemento) return;
+        
+        if (valor > 0) {
+            elemento.className = "asset-ticker c-green";
+        } else if (valor < 0) {
+            elemento.className = "asset-ticker c-pink";
+        } else {
+            elemento.className = "asset-ticker c-white";
+        }
+    }
+
+    function formatarDistribuicao(valores, ids) {
+        return ids.map((id) => {
+            let val = valores[id];
+            
+            // Se o ativo for VIX ou DXY, inverte o valor para a exibição matemática
+            if (id === 'vix' || id === 'dxy') {
+                let valInvertido = -val;
+                let sinal = valInvertido >= 0 ? '+' : '';
+                let cor = valInvertido >= 0 ? 'c-green' : 'c-pink';
+                return `<span class="math-badge ${cor}">(-)[${sinal}${valInvertido.toFixed(1)}%]</span>`;
+            }
+            
+            let sinal = val >= 0 ? '+' : '';
+            let cor = val >= 0 ? 'c-green' : 'c-pink';
+            return `<span class="math-badge ${cor}">[${sinal}${val.toFixed(1)}%]</span>`;
+        }).join(' + ');
+    }
+
+    function calcularTudo() {
+        let vals = {};
+        
+        // Coleta dinâmica de todos os inputs
+        let todosAtivos = [...ativosConfig.macro, ...ativosConfig.adrs];
+        todosAtivos.forEach(ativo => {
+            let val = parseFloat(document.getElementById(`val-${ativo}`).value) || 0;
+            vals[ativo] = val;
+            colorirTicker(`val-${ativo}`, val);
+        });
+
+        // VIX e DXY invertidos no cálculo da Soma Macro (Correlação Inversa clássica com o Mercado)
+        let somaMacro = (-vals.vix) + vals.fef + vals.cl1 + (-vals.dxy); 
+        let somaADRs = vals.vale + vals.pbr + vals.itub + vals.bbdc + vals.bbas + vals.b3sa;
+
+        let somaGlobal = somaMacro + somaADRs;
+        let absGlobal = Math.abs(somaGlobal);
+
+        // Atualiza a seção do detalhamento matemático estruturado
+        document.getElementById('math-macro-expr').innerHTML = formatarDistribuicao(vals, ativosConfig.macro);
+        document.getElementById('math-macro-res').innerText = ` = ${somaMacro >= 0 ? '+' : ''}${somaMacro.toFixed(1)}%`;
+        document.getElementById('math-macro-res').className = somaMacro >= 0 ? 'c-green' : 'c-pink';
+
+        document.getElementById('math-adrs-expr').innerHTML = formatarDistribuicao(vals, ativosConfig.adrs);
+        document.getElementById('math-adrs-res').innerText = ` = ${somaADRs >= 0 ? '+' : ''}${somaADRs.toFixed(1)}%`;
+        document.getElementById('math-adrs-res').className = somaADRs >= 0 ? 'c-green' : 'c-pink';
+
+        // Renderização do Display Central e cálculo do ponteiro
+        let display = document.getElementById('total-display');
+        display.innerText = `${somaGlobal >= 0 ? '+' : ''}${somaGlobal.toFixed(1)}%`;
+        
+        if(somaGlobal > 0) display.className = "total-percentage c-green";
+        else if(somaGlobal < 0) display.className = "total-percentage c-pink";
+        else display.className = "total-percentage c-white";
+
+        // Movimentação do ponteiro do Gauge (-90° a +90°)
+        let angulo = somaGlobal * 12; // Sensibilidade de rotação
+        if (angulo > 85) angulo = 85;
+        if (angulo < -85) angulo = -85;
+        document.getElementById('needle').style.transform = `rotate(${angulo}deg)`;
+
+        // Calibração e ativação das tabelas de mapeamento por intensidade
+        document.querySelectorAll('.intensity-table tr').forEach(r => r.className = '');
+        document.querySelectorAll('.bias-box').forEach(b => b.className = 'bias-box');
+        
+        let statusDisplay = document.getElementById('status-display');
+
+        if (absGlobal < 1.5) {
+            document.getElementById('row-lateral').className = 'row-active-style';
+            document.getElementById('strat-lat').className = 'bias-box active';
+            statusDisplay.innerText = "NEUTRO - RANGE LATERALIZADO";
+            statusDisplay.className = "display-status c-blue";
+        } else if (absGlobal >= 1.5 && absGlobal < 3.5) {
+            document.getElementById('row-fraca').className = 'row-active-style';
+            setDirecionalBias(somaGlobal, "EXPRESSÃO FRACA");
+        } else if (absGlobal >= 3.5 && absGlobal < 6.5) {
+            document.getElementById('row-moderada').className = 'row-active-style';
+            setDirecionalBias(somaGlobal, "MODERADO");
+        } else {
+            document.getElementById('row-forte').className = 'row-active-style';
+            setDirecionalBias(somaGlobal, "FORTE IMPULSO");
+        }
+    }
+
+    function setDirecionalBias(total, intensidadeNome) {
+        let statusDisplay = document.getElementById('status-display');
+        if (total > 0) {
+            document.getElementById('strat-pos').className = 'bias-box active';
+            statusDisplay.innerText = `ALTA - ${intensidadeNome}`;
+            statusDisplay.className = "display-status c-green";
+        } else {
+            document.getElementById('strat-neg').className = 'bias-box active';
+            statusDisplay.innerText = `BAIXA - ${intensidadeNome}`;
+            statusDisplay.className = "display-status c-pink";
+        }
+    }
+
+    function randomizarGrupo(grupo) {
+        ativosConfig[grupo].forEach(ativo => {
+            let randVal = (Math.random() * 5 - 2.5).toFixed(1);
+            document.getElementById(`val-${ativo}`).value = randVal;
+        });
         calcularTudo();
     }
 
     function limparTudo() {
-        idsMacro.concat(idsADRs).forEach(id => document.getElementById(id).value = "0.0");
-        calcularTudo();
-    }
-
-    function randomizarMacro() {
-        idsMacro.forEach(id => document.getElementById(id).value = ((Math.random() * 4) - 2).toFixed(1));
-        calcularTudo();
-    }
-
-    function randomizarADRs() {
-        idsADRs.forEach(id => document.getElementById(id).value = ((Math.random() * 6) - 3).toFixed(1));
-        calcularTudo();
-    }
-
-    function colorirLinha(idElemento, valor) {
-        let row = document.getElementById(idElemento);
-        let text = row.querySelector('.asset-ticker');
-        if(valor > 0) {
-            text.className = 'asset-ticker c-green';
-            row.style.background = 'rgba(0, 255, 170, 0.01)';
-        } else if (valor < 0) {
-            text.className = 'asset-ticker c-pink';
-            row.style.background = 'rgba(255, 74, 107, 0.01)';
-        } else {
-            text.className = 'asset-ticker c-blue';
-            row.style.background = 'transparent';
-        }
-    }
-
-    function calcularTudo() {
-        let somaMacro = 0;
-        let somaADRs = 0;
-
-        let htmlMacro = '<span class="formula-sub-title">Macro:</span>';
-        let htmlADRs = '<span class="formula-sub-title">ADRs:</span>';
-
-        // Processa Bloco Macro (VIX e DXY invertem o impacto na bolsa)
-        idsMacro.forEach((id, idx) => {
-            let v = parseFloat(document.getElementById(id).value) || 0;
-            
-            let pesoEfetivo = v;
-            if (tickersMacro[idx] === 'VIX' || tickersMacro[idx] === 'DXY') {
-                pesoEfetivo = -v; 
-            }
-            somaMacro += pesoEfetivo;
-
-            colorirLinha('row-' + tickersMacro[idx], v);
-            let corBox = v >= 0 ? 'var(--neon-green)' : 'var(--neon-pink)';
-            htmlMacro += `<div class="formula-box" style="color: ${corBox}">[${v >= 0 ? '+':''}${v.toFixed(1)}%]</div>`;
-            if(idx < idsMacro.length - 1) htmlMacro += ' + ';
+        let todosAtivos = [...ativosConfig.macro, ...ativosConfig.adrs];
+        todosAtivos.forEach(ativo => {
+            document.getElementById(`val-${ativo}`).value = "0.0";
         });
-        htmlMacro += ` = <span>${somaMacro >= 0 ? '+':''}${somaMacro.toFixed(1)}%</span>`;
-
-        // Processa Bloco ADRs
-        idsADRs.forEach((id, idx) => {
-            let v = parseFloat(document.getElementById(id).value) || 0;
-            somaADRs += v;
-
-            colorirLinha('row-' + tickersADRs[idx], v);
-            let corBox = v >= 0 ? 'var(--neon-green)' : 'var(--neon-pink)';
-            htmlADRs += `<div class="formula-box" style="color: ${corBox}">[${v >= 0 ? '+':''}${v.toFixed(1)}%]</div>`;
-            if(idx < idsADRs.length - 1) htmlADRs += ' + ';
-        });
-        htmlADRs += ` = <span>${somaADRs >= 0 ? '+':''}${somaADRs.toFixed(1)}%</span>`;
-
-        // Renderiza as fórmulas
-        document.getElementById('formula-macro-container').innerHTML = htmlMacro;
-        document.getElementById('formula-adr-container').innerHTML = htmlADRs;
-
-        // CÁLCULO GLOBAL CONSOLIDADO
-        let somaGlobal = somaMacro + somaADRs;
-        let absGlobal = Math.abs(somaGlobal);
-
-        // Atualização do display principal
-        let display = document.getElementById('total-display');
-        display.innerText = `${somaGlobal >= 0 ? '+' : ''}${somaGlobal.toFixed(1)}%`;
-        display.className = `display-value ${somaGlobal >= 0 ? 'c-green' : 'c-pink'}`;
-
-        // Limpa estados ativos anteriores
-        document.getElementById('row-lateral').classList.remove('active', 'row-active-style');
-        document.getElementById('row-fraca').classList.remove('active', 'row-active-style');
-        document.getElementById('row-moderada').classList.remove('active', 'row-active-style');
-        document.getElementById('row-forte').classList.remove('active', 'row-active-style');
-        document.getElementById('strat-pos').classList.remove('active');
-        document.getElementById('strat-neg').classList.remove('active');
-        document.getElementById('strat-lat').classList.remove('active');
-
-        // Estratégia Direcional
-        let statusText = "CONSOLIDAÇÃO";
-        if (somaGlobal > 0.2) {
-            document.getElementById('strat-pos').classList.add('active');
-            statusText = "SINAL DE ALTA";
-        } else if (somaGlobal < -0.2) {
-            document.getElementById('strat-neg').classList.add('active');
-            statusText = "SINAL DE BAIXA";
-        } else {
-            document.getElementById('strat-lat').classList.add('active');
-            statusText = "NEUTRO - AGUARDAR";
-        }
-
-        // Faixas de Intensidade
-        if (absGlobal < 1.5) {
-            document.getElementById('row-lateral').classList.add('active', 'row-active-style');
-        } else if (absGlobal <= 3.5) {
-            document.getElementById('row-fraca').classList.add('active', 'row-active-style');
-            statusText += " (FRACA)";
-        } else if (absGlobal <= 6.5) {
-            document.getElementById('row-moderada').classList.add('active', 'row-active-style');
-            statusText += " (MODERADA)";
-        } else {
-            document.getElementById('row-forte').classList.add('active', 'row-active-style');
-            statusText += " (FORTE)";
-        }
-
-        document.getElementById('status-display').innerText = statusText;
+        calcularTudo();
     }
 
-    calcularTudo();
+    // Inicialização automática puxando a API assim que a página abre
+    window.onload = buscarCotacoesApi;
 </script>
 
 </body>
